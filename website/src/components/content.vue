@@ -3,7 +3,7 @@
         <el-input v-model="githubUser" placeholder="user name please" @keydown.enter="searchUser()"/>
         <el-button type="primary" @click="searchUser()">Search
         </el-button>
-        <el-button type="warning" plain @click="clear()">清理</el-button>
+        <el-button type="warning" plain @click="clear()">Clear</el-button>
     </div>
     <div id="state">
         {{ searchState }}
@@ -25,11 +25,22 @@
                 :UserUpdateTime="UserUpdateTime"
         ></UserMessage>
     </div>
+    <hr>
+    <div id="moreMessage" v-show="showReturnMessage">
+        <router-link to="/userRepos">
+            <el-button type="primary" round @click="searchRepos()">
+                Repos
+            </el-button>
+        </router-link>
+        <router-view></router-view>
+        {{UserReposMessage}}
+    </div>
 </template>
 
 <script>
 import axios from "axios";
 import UserMessage from "@/components/userMessage.vue";
+import UserRepos from "@/components/userRepos.vue";
 import {defineComponent} from "vue";
 
 
@@ -38,14 +49,16 @@ export default defineComponent({
     components: {
         axios,
         UserMessage,
+        UserRepos,
     },
     data() {
         return {
             githubUser: '',
             userMessage: 'https://api.github.com/users/',
+            userMessageRepos: 'https://api.github.com/users/',
             searchState: '',
             showReturnMessage: false,
-            // props
+            // 基本信息
             UserName: '',
             UserId: '',
             UserNodeId: '',
@@ -59,6 +72,9 @@ export default defineComponent({
             UserFollowing: '',
             UserCreateTime: '',
             UserUpdateTime: '',
+            //用户存储库信息
+            UserReposMessage: '',
+
         }
     },
     props: [
@@ -75,6 +91,8 @@ export default defineComponent({
         'UserFollowing',
         'UserCreateTime',
         'UserUpdateTime',
+        //仓库信息
+        'UserReposMessage',
     ],
     methods: {
         searchUser() {
@@ -102,6 +120,15 @@ export default defineComponent({
                 this.UserCreateTime = response.data.created_at;
                 this.UserUpdateTime = response.data.updated_at;
 
+            }).catch(error => {
+                console.log(error)
+            })
+        },
+        searchRepos() {
+            axios.get(this.userMessageRepos + this.githubUser + '/repos', {}).then(response => {
+                this.UserReposMessage = response.data;
+                this.UserReposMessageCount = response.data.length;
+                console.log(response)
             }).catch(error => {
                 console.log(error)
             })
