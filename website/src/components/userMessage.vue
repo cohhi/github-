@@ -1,17 +1,26 @@
 <template>
     <div id="content">
         <div id="left">
-            <img v-bind:src="UserHeadPicture" alt="">
+            <img v-bind:src="UserHeadPicture" alt="图片加载中">
         </div>
         <div id="right">
-            <h3>user:{{ UserName }}</h3>
-            <h3>id:{{ UserId }}</h3>
-            <h3>node id:{{ UserNodeId }}</h3>
+            <h3>user:&nbsp;&nbsp;<span>{{ UserName }}</span></h3>
+            <h3>id:&nbsp;&nbsp;<span>{{ UserId }}</span></h3>
+            <h3>node id:&nbsp;&nbsp;<span>{{ UserNodeId }}</span></h3>
         </div>
         <br>
     </div>
     <div id="moreMessage">
         <p>More</p>
+        <h4>blog:<span>{{UserBlog}}</span></h4>
+        <h4>location:<span>{{UserLocation}}</span></h4>
+        <h4>email:<span>{{UserEmail}}</span></h4>
+        <h4>Twitter:<span>{{UserTwitter}}</span></h4>
+        <h4>Repos:<span>{{UserRepos}}</span></h4>
+        <h4>Followers:<span>{{UserFollowers}}</span></h4>
+        <h4>Following:<span>{{UserFollowing}}</span></h4>
+        <h4>CreateTime:<span>{{UserCreateTime}}</span></h4>
+        <h4>UpdateTime:<span>{{UserUpdateTime}}</span></h4>
     </div>
 </template>
 
@@ -63,5 +72,8 @@ body {
 #moreMessage > p {
     font-size: 3vh;
     color: green;
+}
+span{
+    color: violet;
 }
 </style>

@@ -3,25 +3,26 @@
         <el-input v-model="githubUser" placeholder="user name please" @keydown.enter="searchUser()"/>
         <el-button type="primary" @click="searchUser()">Search
         </el-button>
+        <el-button type="warning" plain @click="clear()">清理</el-button>
     </div>
     <div id="state">
         {{ searchState }}
     </div>
-    <div id="stateMessage">
+    <div id="stateMessage" v-show="showReturnMessage">
         <UserMessage
-            :UserName="UserName"
-            :UserId="UserId"
-            :UserNodeId="UserNodeId"
-            :UserHeadPicture="UserHeadPicture"
-            :UserBlog:="UserBlog"
-            :UserLocation="UserLocation"
-            :UserEmail="UserEmail"
-            :UserTwitter="UserTwitter"
-            :UserRepos="UserRepos"
-            :UserFollowers="UserFollowers"
-            :UserFollowing="UserFollowing"
-            :UserCreateTime="UserCreateTime"
-            :UserUpdateTime="UserUpdateTime"
+                :UserName="UserName"
+                :UserId="UserId"
+                :UserNodeId="UserNodeId"
+                :UserHeadPicture="UserHeadPicture"
+                :UserBlog:="UserBlog"
+                :UserLocation="UserLocation"
+                :UserEmail="UserEmail"
+                :UserTwitter="UserTwitter"
+                :UserRepos="UserRepos"
+                :UserFollowers="UserFollowers"
+                :UserFollowing="UserFollowing"
+                :UserCreateTime="UserCreateTime"
+                :UserUpdateTime="UserUpdateTime"
         ></UserMessage>
     </div>
 </template>
@@ -43,6 +44,7 @@ export default defineComponent({
             githubUser: '',
             userMessage: 'https://api.github.com/users/',
             searchState: '',
+            showReturnMessage: false,
             // props
             UserName: '',
             UserId: '',
@@ -77,12 +79,12 @@ export default defineComponent({
     methods: {
         searchUser() {
             this.searchState = "查找中..."
+            this.showReturnMessage = true
             axios.get(this.userMessage + this.githubUser, {}).then(response => {
                 console.log(response)
                 switch (response.status) {
                     case 200: {
                         this.searchState = "找到了捏"
-                        console.log(response)
                         break;
                     }
                 }
@@ -95,7 +97,7 @@ export default defineComponent({
                 this.UserEmail = response.data.email;
                 this.UserTwitter = response.data.twitter_username;
                 this.UserRepos = response.data.public_repos;
-                this.UserFollowers = response.data.followers_url;
+                this.UserFollowers = response.data.followers;
                 this.UserFollowing = response.data.following;
                 this.UserCreateTime = response.data.created_at;
                 this.UserUpdateTime = response.data.updated_at;
@@ -103,11 +105,14 @@ export default defineComponent({
             }).catch(error => {
                 console.log(error)
             })
+        },
+        clear() {
+            this.showReturnMessage = false
         }
     },
     watch: {
         githubUser(newValue, oldValue) {
-
+            // this.searchUser()
         }
     }
 })
