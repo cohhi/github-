@@ -33,7 +33,11 @@
             </el-button>
         </router-link>
         <router-view></router-view>
-        {{UserReposMessage}}
+        <ul>
+            <li v-for="list in UserReposMessage">
+                {{list.name}}
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -99,7 +103,6 @@ export default defineComponent({
             this.searchState = "查找中..."
             this.showReturnMessage = true
             axios.get(this.userMessage + this.githubUser, {}).then(response => {
-                console.log(response)
                 switch (response.status) {
                     case 200: {
                         this.searchState = "找到了捏"
@@ -127,8 +130,8 @@ export default defineComponent({
         searchRepos() {
             axios.get(this.userMessageRepos + this.githubUser + '/repos', {}).then(response => {
                 this.UserReposMessage = response.data;
-                this.UserReposMessageCount = response.data.length;
                 console.log(response)
+                console.log(response.data[0])
             }).catch(error => {
                 console.log(error)
             })

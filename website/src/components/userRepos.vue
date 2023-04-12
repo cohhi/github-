@@ -1,9 +1,5 @@
 <template>
-  <ul>
-      <li v-for="list in UserReposMessage.data">
-          {{list}}
-      </li>
-  </ul>
+
 </template>
 
 <script>
